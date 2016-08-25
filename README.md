@@ -1,22 +1,22 @@
 # jstack-counter
-This script counts interesting threads in stacktraces dumped by java jstack
+This script counts interesting threads in stack traces dumped by java jstack
 
 # Analyzing performance issues using stack traces
-Have you ever had performance problems with your java service? Does your service response is too long? CPU usage increased near to 100%?
+Had you ever performance problems with your java service? Does your service response is too long? CPU usage increased near to 100%?
 How to debug such issues on production servers?
-One of possible approach is to dump stack traces of all threads and analyze what service is doing.
+One possible approach is to dump stack traces of all threads and analyze what is doing your service.
 There are a lot of tools to dump stack traces: java mission control, visual vm, jconsole.
 
 But I often use simple [jstack](http://docs.oracle.com/javase/7/docs/technotes/tools/share/jstack.html) from JDK.
-Mainly because it allow to dump threads directly from command line of running server.
+Mainly because it allow to dump threads directly from command line on running server - no gui, no jmx is needed.
 
 # Interesting threads
 Analyzing full stack traces is boring and arduous process. Especially when service has hundreds of threads. It's often desirable to *have fast insight* into interesting threads. What the most interesting threads are? Threads which are running my code (code developed by my team), doing database operations etc.
 
-jstack-counter.awk is an awk script, which parses stacktraces dumped by jstack, looks for interesting threads and count them. As a result you will see a list of interesting threads named by running method.
+jstack-counter.awk is an awk script, which parses stacktraces dumped by jstack, looks for interesting threads and counts them. As a result you will see a list of interesting threads named by running method.
 
 #Example
-Let's say that interesting threads are those running methods from following packages:
+Let's say that interesting threads are those running code from the following packages:
 
 * pl.zxspeccy
 * oracle.jdbc
@@ -46,7 +46,7 @@ It means that 2 threads are running method `pl.zxspeccy.soapapi.stubs.ServiceSer
 
 
 #Usage
-Count interesting threads in stacktraces from file:
+Count interesting threads in stacktraces from file stack-traces.jtdp:
 `awk -f jstack-counter.awk stack-traces.jtdp`
 
 Count interesting threads in running process with pid 23344:
@@ -54,4 +54,4 @@ Count interesting threads in running process with pid 23344:
 
 
 *Don't forget to change definition of interesting threads to your packages*:
-/pl\.zxspeccy|oracle\.jdbc|com\.mchange\.v2/
+(/pl\.zxspeccy|oracle\.jdbc|com\.mchange\.v2/)
